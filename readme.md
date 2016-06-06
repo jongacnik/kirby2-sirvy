@@ -142,9 +142,14 @@ c::set('sirvy.services', [
 
 ```
 
+## Security
+
+As [brought up](https://github.com/getkirby/kirby/issues/412) in the early 2.3 discussions, an API like this could potentially lead to misuse when considering image manipulation. I might look into adding some built-in options for rate limiting or auth, but in the meantime if this is a concern for you, nothing stopping you from adding the functionality into the services yourself!
+
 ## Todo
 
-- Rate Limiting? As [brought up](https://github.com/getkirby/kirby/issues/412) in the early 2.3 discussions, an API like this could potentially lead to misuse.
+- Caching
+- Rate Limiting? See Security
 
 ## Author
 
