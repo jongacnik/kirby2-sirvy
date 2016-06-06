@@ -59,8 +59,6 @@ returns a cropped thumbnail
 Instead of manually building up the URLs for services, a Sirvy page method is exposed to make this super simple:
 
 ```php
-<?php
-
 page('home')->sirvy('json');
 // returns
 // -> http://yourkirby.com/sirvy/home?service=json
@@ -69,8 +67,6 @@ page('home')->sirvy('json');
 The first parameter is always the name of the service, the second *optional* parameter is for passing in an array of additional data:
 
 ```php
-<?php
-
 page('home')->sirvy('crop', [
   'image'  => page('home')->image()->filename(),
   'width'  => 200,
@@ -83,14 +79,13 @@ page('home')->sirvy('crop', [
 This is great for spitting out many thumbnails without blocking initial page render:
 
 ```php
-<?php
-
-foreach ($hundredsOfImages as $i) {
-  echo '<img src="' . $page->sirvy('resize', [
+<? foreach ($hundredsOfImages as $i) :
+  $thumb = $page->sirvy('resize', [
     'image' => $i->filename(),
     'width' => 500
-  ]) . '">';
-}
+  ]) ?>
+  <img src="<?= $thumb ?>">
+<? endforeach ?>
 
 ```
 
@@ -108,8 +103,6 @@ The 3 included services (json, resize, and crop) are all defined as files in the
 You can also register services via an option in your `config.php`. The key of the array becomes the name of the service. Here is how you could add a `toArray` service that exposes the page's contents as a PHP array:
 
 ```php
-<?php
-
 c::set('sirvy.services', [
   'toArray' => function ($page, $data) {
     print_r($page->toArray());
@@ -128,8 +121,6 @@ page('home')->sirvy('toArray')
 ## Options
 
 ```php
-<?php
-
 // change the sirvy path
 c::set('sirvy.path', 's');
 // -> http://yourkirby.com/s/home?service=json
