@@ -5,7 +5,7 @@
  *
  * @author Jon Gacnik <jon@folderstudio.com>
  * @link https://github.com/jongacnik/sirvy
- * @version 1.1.0
+ * @version 1.1.1
  *
  */
 

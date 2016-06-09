@@ -20,8 +20,8 @@ class SirvyCache {
 
   }
 
-  public function __call ($name, $args) {
-    return $this->cache->{$name}($this->key, ...$args);
+  public function __call($name, $args = []) {
+    return call_user_func_array([$this->cache, $name], array_merge([$this->key], $args));
   }
 
 }
