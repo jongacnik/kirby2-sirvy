@@ -98,14 +98,14 @@ Services are registered 2 ways:
 1. From PHP files in the `services` folder inside of the Sirvy plugin folder
 2. By registering them as an option in your `config.php`
 
-The 3 included services (json, resize, and crop) are all defined as files in the `services` folder. The name of the file becomes the name of the service (`json.php` -> `json`). To add your own services, just add more files to this folder. The file needs to return a function. Take a peek at the included services as examples.
+The 3 included services (json, resize, and crop) are all defined as files in the `services` folder. The name of the file becomes the name of the service (`json.php` -> `json`). To add your own services, just add more files to this folder. The file needs to return a function. Unless you are returning media files, you will typically want this function to return a [Kirby response object](https://getkirby.com/docs/toolkit/api#response). Take a peek at the included services as examples.
 
 You can also register services via an option in your `config.php`. The key of the array becomes the name of the service. Here is how you could add a `toArray` service that exposes the page's contents as a PHP array:
 
 ```php
 c::set('sirvy.services', [
   'toArray' => function ($page, $data) {
-    print_r($page->toArray());
+    return new Response(print_r($page->toArray()));
   }
 ]);
 
@@ -118,6 +118,20 @@ page('home')->sirvy('toArray')
 // That url would respond with the page object as a plain PHP array!
 ```
 
+## Caching
+
+Caching is enabled on a per-service basis using the Kirby file cache. This is great if you want to cache partials like json or html snippets:
+
+```
+/sirvy/home?service=json&cache=1
+```
+
+This json response will be cached in the Kirby cache directory.
+
+By default the cached items will never expire, but you can change this with an option. The cache is always flushed when making content changes via the panel.
+
+Caching will only work when your service returns a [Kirby response object](https://getkirby.com/docs/toolkit/api#response). I also wouldn't recommend trying to cache a non-text response (like image or video). I haven't put in catches so weirdness will likely happen.
+
 ## Options
 
 ```php
@@ -125,13 +139,21 @@ page('home')->sirvy('toArray')
 c::set('sirvy.path', 's');
 // -> http://yourkirby.com/s/home?service=json
 
+// expire cached responses after an hour
+c::set('sirvy.cache.duration', 60);
+
+// register additional services
 c::set('sirvy.services', [
   'serviceName' => function ($page, $data) {
-    // do something.
+    return new Response('content');
   }
 ]);
 
 ```
+
+## Errors
+
+If Sirvy encounters an error, such as being unable to find a page uri or service, a json error response  will be returned (status code 400).
 
 ## Security
 
@@ -139,7 +161,6 @@ As [brought up](https://github.com/getkirby/kirby/issues/412) in the early 2.3 d
 
 ## Todo
 
-- Caching
 - Rate Limiting? See Security
 
 ## Author
