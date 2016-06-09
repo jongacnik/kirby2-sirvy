@@ -8,7 +8,7 @@
  * 2.3 beta) or returning a page as json. *Docs in repo.*
  *
  * @author Jon Gacnik <jon@folderstudio.com>
- * @link
+ * @link https://github.com/jongacnik/sirvy
  * @version 1.0.0
  *
  */
@@ -56,34 +56,34 @@ class Sirvy {
 
   protected function run ($path) {
 
-    if ($page = page($path)) {
-
+    if ($page = page($path)) :
       $query = kirby()->request()->query();
-
-      if ($service = $query->service()) {
-        if (array_key_exists($service, $this->services)) {
-          if (is_callable($this->services[$service])) {
+      if ($service = $query->service()) :
+        if (array_key_exists($service, $this->services)) :
+          if (is_callable($this->services[$service])) :
             return $this->services[$service]($page, $query);
-          } else {
+          else :
             echo "{$service} is not a valid Sirvy service function";
-          }
-        } else {
+          endif;
+        else :
           echo "{$service} service does not exist";
-        }
-      }
-
-    } else {
+        endif;
+      endif;
+    else :
       echo "Sirvy can't find that page!";
-    }
+    endif;
 
   }
 
   public function url ($page, $service, $options) {
+
     $base = site()->url() . DS . $this->path;
     $pageUri = $page ? $page->uri() : '';
     $serviceQuery = 'service=' . $service;
     $optionsQuery = http_build_query($options);
+
     return $base . DS . $pageUri . '?' . $serviceQuery . ($optionsQuery ? '&' . $optionsQuery : '');
+
   }
 
 }
