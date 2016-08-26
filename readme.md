@@ -26,7 +26,15 @@ The `/sirvy` route grabs the page object based on the uri and passes it into a s
 
 ## Services
 
-Sirvy comes with 3 services built-in, but you can add as many services as you need!
+Sirvy comes with 4 services built-in, but you can add as many services as you need!
+
+#### tree
+
+```
+/sirvy/home?service=tree
+```
+
+returns page contents, files, and children recursively as json
 
 #### json
 
