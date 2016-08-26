@@ -149,6 +149,9 @@ c::set('sirvy.services', [
   }
 ]);
 
+// enable cors on sirvy requests
+c::set('sirvy.cors', '*');
+
 ```
 
 ## Errors

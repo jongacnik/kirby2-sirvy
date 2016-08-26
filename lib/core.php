@@ -10,6 +10,7 @@ class Sirvy {
   public function __construct () {
 
     $this->path = kirby()->option('sirvy.path', 'sirvy');
+    $this->cors = kirby()->option('sirvy.cors', false);
 
     $this->registerServices();
     $this->registerRoute();
@@ -23,6 +24,10 @@ class Sirvy {
         'pattern' => $this->path . '/(:all?)',
         'action' => function ($path = null) {
           $runner = new SirvyRunner($path, $this->services);
+
+          if ($this->cors) {
+            header('Access-Control-Allow-Origin: ' . $this->cors);
+          }
 
           // Logans Run
           return $runner->run();
